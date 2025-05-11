@@ -1,38 +1,129 @@
-.App {
+/* 1. Overall container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* 2. Header */
+.app-header {
+  padding: 20px 24px;
+  justify-content: center;
+  background: #002b5b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  font-size: 2rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  min-height: 80px !important;
+  padding: 2px 4px !important;
+}
+
+/* 3. Body: sidebar + map */
+.app-body {
+  display: flex;
+  flex: 1;
+}
+.sidebar {
+  width: 300px;
+  background: #f7f9fa;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+  overflow-y: auto;
+}
+.map-container {
+  flex: 1;
+  position: relative;
+}
+
+/* 4. Plan card */
+.plan-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.plan-card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  color: #002b5b;
+}
+.error-banner {
+  background: #d32f2f;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* 5. Legend at bottom of sidebar */
+.legend {
+  margin-top: 15px; 
+  margin-bottom: 24px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.legend h4 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #333;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.legend-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #555;
+}
+.leg-color {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 3px;
+}
+.leg-color.grey   { background: #888; }
+.leg-color.green  { background: #2ca02c; }
+.leg-color.orange { background: #ff7f0e; }
+
+/* 6. Responsive for small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    box-shadow: none;
+  }
+  .app-body {
+    flex-direction: column;
+  }
+  .map-container {
+    height: 60vh;
+  }
+}
+
+.export-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  background: #34a853;
   color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.export-btn:hover {
+  background: #2c8c47;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.station-marker {
+  border-radius: 0;
+  cursor: pointer;
 }
