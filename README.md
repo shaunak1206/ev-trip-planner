@@ -69,7 +69,7 @@ Open http://localhost:3000 in your browser.
 ev-trip-planner/
 ├── public/
 │   ├── battery-charging.png      # custom marker icon
-│   ├── battery-full.png          # favicon & PWA icon
+│   ├── full-battery.ico          # favicon & PWA icon
 │   └── index.html                # root HTML template
 ├── src/
 │   ├── components/
