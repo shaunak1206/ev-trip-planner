@@ -109,7 +109,7 @@ This project is licensed under the MIT License.
 See the [LICENSE](https://mit-license.org/) file for details.
 
 
-### ❤️ Acknowledgements
+### Acknowledgements
 • Mapbox for the GL JS SDK
 
 • OpenChargeMap for providing open EV charger data
