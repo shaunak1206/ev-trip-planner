@@ -75,7 +75,7 @@ export async function findChargingStations(lat, lon, radiusMeters = 5000) {
   await _sleep(250);
 
   const fetchPOIs = async () => {
-    const resp = await axios.get('/ocm/v3/poi/', {
+    const resp = await axios.get('https://api.openchargemap.io/v3/poi/', {  // ← full URL here
       params: {
         key: process.env.REACT_APP_CHARGE_API_KEY,
         latitude: lat,
@@ -105,6 +105,7 @@ export async function findChargingStations(lat, lon, radiusMeters = 5000) {
     throw err;
   }
 }
+
 
 /**
  * Multi-stop driving route: returns a single LineString for all waypoints.
