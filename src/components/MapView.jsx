@@ -144,6 +144,14 @@ export default function MapView({ tripData, onError, onRoutePlotted }) {
         const pois = await findChargingStations(lat, lon, searchRadius);
         if (!pois.length) break;
 
+
+        console.log('🔍 raw pois:', pois);
+
+        if (!Array.isArray(pois) || pois.length === 0) {
+          console.warn('⚠️  No valid array from OpenChargeMap, skipping stops loop');
+          break;  // exit your while-loop so you don’t try to .reduce on bad data
+        }
+
         const best = pois.reduce(
           (best, poi) => {
             const { Longitude, Latitude, Title } = poi.AddressInfo;
