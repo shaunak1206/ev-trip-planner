@@ -123,7 +123,31 @@
   background: #2c8c47;
 }
 
+.export-steps-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  background: #779feb;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.export-steps-btn:hover {
+  background: #6794e7;
+}
+
+
 .station-marker {
   border-radius: 0;
   cursor: pointer;
+}
+
+.directions-page {
+  padding: 1rem;
+}
+.directions-page ol {
+  margin-left: 1rem;
 }

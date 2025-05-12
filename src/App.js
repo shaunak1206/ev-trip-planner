@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
-import InputForm from './components/InputForm';
-import MapView from './components/MapView';
-import ExportButton from './components/ExportButton';
+
+import InputForm          from './components/InputForm';
+import MapView            from './components/MapView';
+import ExportButton       from './components/ExportButton';       // your old export-to-Google-Maps
+import ExportStepsButton  from './components/ExportStepsButton';  // the new steps exporter
 
 function Legend() {
   return (
@@ -25,8 +27,9 @@ function Legend() {
 
 function App() {
   const [tripParams, setTripParams] = useState(null);
-  const [error, setError] = useState('');
-  const [routeInfo, setRouteInfo] = useState(null);
+  const [error,       setError]     = useState('');
+  const [routeInfo,   setRouteInfo] = useState(null);
+  // routeInfo will be { start, stops, end, steps }
 
   const handlePlan = params => {
     if (params.capacity < 20 || params.capacity > 150) {
@@ -49,22 +52,31 @@ function App() {
 
       <div className="app-body">
         <aside className="sidebar">
-          {/* Plan form */}
+          {/* 1) Plan form */}
           <div className="plan-card">
             {error && <div className="error-banner">{error}</div>}
             <InputForm onSubmit={handlePlan} />
           </div>
 
-          {/* Route key below the form */}
+          {/* 2) Route key */}
           <Legend />
 
-          {/* Export button below the key */}
+          {/* 3) Export buttons */}
           {routeInfo && (
-            <ExportButton
-              start={routeInfo.start}
-              stops={routeInfo.stops}
-              end={routeInfo.end}
-            />
+            <>
+              {/* a) Original Google-Maps export */}
+              <ExportButton
+                start={routeInfo.start}
+                stops={routeInfo.stops}
+                end={routeInfo.end}
+              />
+
+              {/* b) New Turn-by-Turn instructions export */}
+              <ExportStepsButton
+                steps={routeInfo.steps}
+                filename="trip-instructions.txt"
+              />
+            </>
           )}
         </aside>
 
@@ -72,8 +84,8 @@ function App() {
           <MapView
             tripData={tripParams}
             onError={setError}
-            onRoutePlotted={(start, stops, end) => {
-              setRouteInfo({ start, stops, end });
+            onRoutePlotted={(start, stops, end, steps) => {
+              setRouteInfo({ start, stops, end, steps });
             }}
           />
         </main>

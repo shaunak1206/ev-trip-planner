@@ -121,3 +121,22 @@ export async function getMultiRouteGeoJSON(coordsArray) {
 
   return res.body.routes[0].geometry;
 }
+
+
+// src/utils/api.js
+export async function getRouteWithSteps(startCoord, endCoord) {
+  const res = await directionsClient
+    .getDirections({
+      profile: 'driving',
+      waypoints: [
+        { coordinates: startCoord },
+        { coordinates: endCoord }
+      ],
+      geometries: 'geojson',
+      steps: true     // ← request the turn-by-turn steps
+    })
+    .send();
+
+  // returns the full route object, with .geometry and .legs[0].steps
+  return res.body.routes[0];
+}

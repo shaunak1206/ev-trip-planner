@@ -3,6 +3,12 @@ import React from 'react';
 
 export default function ExportButton({ start, stops, end }) {
   const handleExport = () => {
+    // Guard
+    if (!start || !end) {
+      alert('No route to export yet.');
+      return;
+    }
+
     // Google wants "lat,lng" for origin & destination:
     const origin      = encodeURIComponent(`${start[1]},${start[0]}`);
     const destination = encodeURIComponent(`${end[1]},${end[0]}`);

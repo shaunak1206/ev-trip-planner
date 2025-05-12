@@ -1,11 +1,10 @@
 // src/components/MapView.jsx
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { geocode, getRouteGeoJSON, findChargingStations } from '../utils/api';
+import { geocode, getRouteWithSteps, getRouteGeoJSON, findChargingStations } from '../utils/api';
 import length from '@turf/length';
 import along from '@turf/along';
-import distance from '@turf/distance';
-import { point } from '@turf/helpers';
+
 
 
 // just under your imports
@@ -14,7 +13,7 @@ function makeBatteryElement(iconUrl) {
   Object.assign(el.style, {
     width: '32px',
     height: '32px',
-    backgroundImage: `url(${iconUrl})`,
+    backgroundImage: `url(${iconUrl})`,   // ← backticks here!
     backgroundSize:   'contain',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -61,28 +60,49 @@ export default function MapView({ tripData, onError, onRoutePlotted }) {
       const endCoord   = endFeat.center;
 
 
-      const startMarker = new mapboxgl.Marker({ color: '#e67e22' })
-        .setLngLat(startCoord)
-        .setPopup(new mapboxgl.Popup().setText(`Start: ${tripData.start}`))
-        .addTo(map.current);
+    const startMarker = new mapboxgl.Marker({ color: '#e67e22' })
+      .setLngLat(startCoord)
+      .setPopup(new mapboxgl.Popup()
+        .setText(`Start: ${tripData.start}`)   // ← and here
+      )
+      .addTo(map.current);
        
       markersRef.current.push(startMarker);
 
 
       const endMarker = new mapboxgl.Marker({ color: '#e67e22' })
         .setLngLat(endCoord)
-        .setPopup(new mapboxgl.Popup().setText(`End: ${tripData.end}`))
+        .setPopup(new mapboxgl.Popup()
+          .setText(`End: ${tripData.end}`)       // ← and here
+        )
         .addTo(map.current);
 
       markersRef.current.push(endMarker);
 
 
 
-      // b) (optional) country + distance guards...
-      //    -- assume onError checks are here --
+      // b) Country‐check: only allow U.S. cities
+      const getCountry = feat =>
+        feat.context.find(c => c.id.startsWith('country'));
+      const startCountry = getCountry(startFeat);
+      const endCountry   = getCountry(endFeat);
+ 
+      if (!startCountry || startCountry.short_code !== 'us') {
+        onError('Start location must be in the United States.');
+        return;
+      }
+      if (!endCountry || endCountry.short_code !== 'us') {
+        onError('End location must be in the United States.');
+        return;
+      }
+      // clear any previous error
+      onError('');
+
 
       // c) Draw grey “overall” route
-      const overall = await getRouteGeoJSON(startCoord, endCoord);
+      const route = await getRouteWithSteps(startCoord, endCoord);
+      const overall = route.geometry;            // the LineString
+      const steps   = route.legs[0].steps;        // your turn-by-turn array
       if (map.current.getSource('route')) {
         map.current.getSource('route').setData(overall);
       } else {
@@ -153,7 +173,9 @@ export default function MapView({ tripData, onError, onRoutePlotted }) {
       });
 
       // f) Notify parent so ExportButton can render
-      onRoutePlotted?.(startCoord, stops, endCoord);
+      onRoutePlotted?.(startCoord, stops, endCoord, steps);
+
+
 
       // g) Draw green/orange legs
       const waypoints = [startCoord, ...stops.map((s) => s.coord), endCoord];
@@ -193,6 +215,3 @@ export default function MapView({ tripData, onError, onRoutePlotted }) {
 
   return <div ref={mapContainer} style={{ width: '100%', height: '100vh' }} />;
 }
-
-
-
