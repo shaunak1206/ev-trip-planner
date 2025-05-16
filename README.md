@@ -113,3 +113,8 @@ See the [LICENSE](https://mit-license.org/) file for details.
 • Mapbox for the GL JS SDK
 
 • OpenChargeMap for providing open EV charger data
+
+---
+
+*Created by Shaunak Kapur*
+
